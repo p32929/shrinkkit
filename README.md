@@ -22,7 +22,7 @@ Squoosh does one image at a time. TinyPNG uploads your files to somebody else's 
 
 ## Free vs Pro
 
-The free version compresses **5 images per batch** — enough to try it properly.
+The free version compresses **20 images per batch** — enough to try it properly.
 
 **[ShrinkKit Pro](https://p32929.gumroad.com/l/shrinkkit)** — one payment, no subscription:
 - Unlimited images per batch
