@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Remove EXIF and GPS data from photos in bulk — without uploading them</title>
+<meta name="description" content="What EXIF metadata is, what your phone actually writes into a photo, how to check it, and how to strip GPS coordinates from a whole folder of images in your browser without uploading anything.">
+<link rel="canonical" href="https://p32929.github.io/shrinkkit/exif/">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗜️</text></svg>">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://p32929.github.io/shrinkkit/exif/">
+<meta property="og:title" content="Remove EXIF and GPS data from photos in bulk — without uploading them">
+<meta property="og:description" content="What your phone writes into every photo, how to check it, and how to strip it from a whole folder locally.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0d1117;--panel:#161b22;--line:#242c38;--txt:#e6edf3;--dim:#8b949e;--acc:#3fb950}
+body{background:var(--bg);color:var(--txt);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:40px 20px 80px}
+h1{font-size:30px;line-height:1.25;letter-spacing:-.5px;margin-bottom:14px}
+h2{font-size:20px;margin:34px 0 10px}
+p{color:var(--dim);margin-bottom:14px}
+a{color:var(--acc)}
+ul{color:var(--dim);margin:0 0 14px 20px}
+li{margin-bottom:6px}
+code{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:13px;color:var(--txt)}
+.cta{display:block;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:8px;padding:18px 20px;margin:28px 0;text-decoration:none}
+.cta b{color:var(--txt);font-size:17px}
+.cta span{display:block;color:var(--dim);font-size:14px;margin-top:5px}
+footer{margin-top:46px;border-top:1px solid var(--line);padding-top:20px;color:var(--dim);font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Remove EXIF and GPS data from photos — in bulk, without uploading them</h1>
+
+<p>Every photo your phone takes carries a block of hidden metadata called EXIF. Most of it is harmless. One part of it is not: on a phone with location services on, the file records the exact latitude and longitude where the shutter was pressed, usually to within a few metres.</p>
+
+<p>That data travels with the file. Email a holiday photo, attach one to a marketplace listing, post one to a forum that does not strip metadata, and you have published your address, your workplace, or your child's school without meaning to.</p>
+
+<h2>What is actually inside a photo</h2>
+<ul>
+  <li><b>GPSLatitude / GPSLongitude / GPSAltitude</b> — where the photo was taken.</li>
+  <li><b>DateTimeOriginal</b> — the exact second it was taken.</li>
+  <li><b>Make / Model</b> — which phone or camera, down to the model number.</li>
+  <li><b>LensModel, FNumber, ISO, ExposureTime</b> — the camera settings.</li>
+  <li><b>Software</b> — what edited it, and often which version.</li>
+  <li><b>Artist / Copyright</b> — whatever name the camera was configured with.</li>
+  <li>An <b>embedded thumbnail</b> — which, notoriously, is sometimes the <i>uncropped</i> original.</li>
+</ul>
+
+<h2>How to check what one of your own photos is carrying</h2>
+<p>On macOS, open the image in Preview and press <code>⌘I</code>, then look at the GPS tab. On Windows, right-click the file, choose Properties, then Details. On the command line, <code>exiftool photo.jpg</code> prints everything. Do this once with a photo taken at home — it is more persuasive than any explanation.</p>
+
+<h2>Why "just resize it" does not always help</h2>
+<p>Resizing tools that operate on the file container often copy the metadata block straight through to the output. The reliable way to drop it is to <b>re-encode the image from raw pixels</b>: decode the photo, draw those pixels into a fresh buffer, and write a brand-new file. The new file contains pixels and nothing else, because there is nowhere for the old metadata to survive.</p>
+
+<h2>Doing it to a whole folder, locally</h2>
+<p>Most online "EXIF removers" ask you to upload the very photos whose location you are trying to protect, to a server you know nothing about, one at a time. That is the wrong shape for this problem.</p>
+
+<p>ShrinkKit does the re-encode inside your own browser using the Canvas API. The images are read from disk by the page, processed in memory, and handed back to you as downloads. Nothing is uploaded, there is no account, and the page keeps working after you disconnect from the internet. You can confirm all of that from the Network tab in your browser's developer tools, or by reading the source — it is one static HTML file.</p>
+
+<a class="cta" href="https://p32929.github.io/shrinkkit/">
+  <b>Open ShrinkKit →</b>
+  <span>Drop a folder of photos, get them back compressed and metadata-free, as files or one ZIP. Free for 20 images per batch, no signup.</span>
+</a>
+
+<h2>A caveat worth knowing</h2>
+<p>Re-encoding drops metadata, but it is not forensic anonymisation. The pixels themselves can still identify a place, and if you have already shared the original elsewhere, stripping your copy changes nothing. Strip before you share, not after.</p>
+
+<footer>
+Part of <a href="https://p32929.github.io/shrinkkit/">ShrinkKit</a> — a bulk image compressor that never uploads your photos.
+Source: <a href="https://github.com/p32929/shrinkkit">github.com/p32929/shrinkkit</a>. Built by <a href="https://github.com/p32929">Fayaz Bin Salam</a>.
+</footer>
+
+</div>
+</body>
+</html>
