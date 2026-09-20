@@ -8,6 +8,28 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗜️</text></svg>">
 <meta property="og:title" content="ShrinkKit — bulk image compressor, 100% in your browser">
 <meta property="og:description" content="Hundreds of images at once. Nothing uploaded. No signup. Strips EXIF/GPS.">
+<link rel="canonical" href="https://p32929.github.io/shrinkkit/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://p32929.github.io/shrinkkit/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ShrinkKit — bulk image compressor, 100% in your browser">
+<meta name="twitter:description" content="Hundreds of images at once. Nothing uploaded. No signup. Strips EXIF/GPS.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "ShrinkKit",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (web browser)",
+  "url": "https://p32929.github.io/shrinkkit/",
+  "description": "Bulk image compressor that runs entirely in your browser. Compress, resize, convert to WebP/JPEG/PNG and strip EXIF/GPS metadata from a whole folder at once. Nothing is uploaded.",
+  "author": {"@type": "Person", "name": "Fayaz Bin Salam", "url": "https://github.com/p32929"},
+  "offers": [
+    {"@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD"},
+    {"@type": "Offer", "name": "ShrinkKit Pro", "price": "9", "priceCurrency": "USD", "url": "https://p32929.gumroad.com/l/shrinkkit"}
+  ]
+}
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#0d1117;--panel:#161b22;--line:#242c38;--txt:#e6edf3;--dim:#8b949e;--acc:#3fb950;--acc2:#2ea043;--warn:#d29922}
@@ -55,6 +77,11 @@ a.buy{display:inline-block;background:var(--acc2);color:#fff;text-decoration:non
 a.buy:hover{background:var(--acc)}
 .ok{color:var(--acc);font-size:13.5px;margin-top:8px}
 .err{color:#f85149;font-size:13.5px;margin-top:8px}
+.faq{margin-top:46px;border-top:1px solid var(--line);padding-top:26px}
+.faq h2{font-size:20px;margin-bottom:16px}
+.faq h3{font-size:15px;margin-top:20px;color:var(--acc)}
+.faq p{color:var(--dim);font-size:14px;margin-top:6px}
+.faq a{color:var(--acc)}
 footer{margin-top:34px;text-align:center;color:var(--dim);font-size:12.5px;line-height:1.9}
 footer a{color:var(--dim)}
 .hide{display:none}
@@ -133,6 +160,31 @@ footer a{color:var(--dim)}
   </div>
   <div id="licmsg"></div>
 </div>
+
+<section class="faq">
+<h2>Questions people ask before they trust an image compressor</h2>
+
+<h3>Does ShrinkKit upload my images to a server?</h3>
+<p>No. There is no server. The page is a single static HTML file; every image is decoded, resized and re-encoded by your own browser using the Canvas API, and the result is handed straight back to you as a download. You can prove it: open the Network tab in DevTools, compress a folder, and watch that nothing leaves the page. You can also disconnect from the internet after the page loads and it keeps working.</p>
+
+<h3>How do I compress a whole folder of images at once?</h3>
+<p>Drop the folder onto the page (or pick the files), set quality and an optional max width or height, and press Compress. You get every image back individually or as one ZIP. The free version handles 20 images per batch; Pro removes the cap.</p>
+
+<h3>Is this a TinyPNG alternative that works offline?</h3>
+<p>Yes. TinyPNG uploads your files to its servers and puts bulk compression behind a subscription. ShrinkKit does the same job locally, for free up to 20 images at a time, and never sees your files at all. It is also a bulk alternative to Squoosh, which is excellent but compresses one image at a time.</p>
+
+<h3>Does it remove EXIF and GPS location data from photos?</h3>
+<p>Yes, as a side effect of how it works. Re-encoding through Canvas produces a fresh file containing only pixels, so every EXIF, GPS and XMP metadata block is dropped. That means the coordinates of where a phone photo was taken do not travel with it when you share it.</p>
+
+<h3>What formats can it output?</h3>
+<p>WebP, JPEG and PNG, or keep whatever the original was. WebP normally gives the smallest file at the same visual quality. ShrinkKit never hands back a file larger than the one you gave it — if compression would make it bigger, you keep the original.</p>
+
+<h3>Is it free?</h3>
+<p>The tool is free for 20 images per batch, with no signup and no account. <a href="https://p32929.gumroad.com/l/shrinkkit">ShrinkKit Pro</a> is a single $9 payment, no subscription, that removes the batch limit, adds batch rename patterns and remembers your settings. One licence works on every device you own.</p>
+
+<h3>Can I self-host it?</h3>
+<p>Yes. It is one HTML file — clone <a href="https://github.com/p32929/shrinkkit">the repository</a> and open <code>index.html</code>, or drop it on any static host. The source is published so you can read every line before trusting it with your photos, which is rather the point.</p>
+</section>
 
 <footer>
   Built by <a href="https://github.com/p32929" target="_blank" rel="noopener">Fayaz Bin Salam</a> ·
