@@ -175,6 +175,7 @@ footer a{color:var(--dim)}
 
 <h3>Does it remove EXIF and GPS location data from photos?</h3>
 <p>Yes, as a side effect of how it works. Re-encoding through Canvas produces a fresh file containing only pixels, so every EXIF, GPS and XMP metadata block is dropped. That means the coordinates of where a phone photo was taken do not travel with it when you share it.</p>
+<p><a href="./exif/">More on what is hidden inside your photos and how to check it →</a></p>
 
 <h3>What formats can it output?</h3>
 <p>WebP, JPEG and PNG, or keep whatever the original was. WebP normally gives the smallest file at the same visual quality. ShrinkKit never hands back a file larger than the one you gave it — if compression would make it bigger, you keep the original.</p>
