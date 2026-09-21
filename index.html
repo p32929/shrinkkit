@@ -8,6 +8,8 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗜️</text></svg>">
 <meta property="og:title" content="ShrinkKit — bulk image compressor, 100% in your browser">
 <meta property="og:description" content="Hundreds of images at once. Nothing uploaded. No signup. Strips EXIF/GPS.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d1117">
 <link rel="canonical" href="https://p32929.github.io/shrinkkit/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://p32929.github.io/shrinkkit/">
@@ -511,6 +513,8 @@ $('meta').onclick = async () => {
   }
 };
 
+
+if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
 </html>
