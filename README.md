@@ -20,6 +20,7 @@ Squoosh does one image at a time. TinyPNG uploads your files to somebody else's 
 - **Strips EXIF and GPS metadata** — canvas re-encoding drops every metadata block, so location data in your photos never leaves with them
 - Never returns a file bigger than the one you gave it
 - One HTML file. No build step, no framework, no tracking, no analytics.
+- **Installable PWA** — install it from the browser and it keeps working with no network at all, because there is no server to talk to
 
 ## Free vs Pro
 
