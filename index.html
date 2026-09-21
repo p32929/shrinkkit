@@ -84,6 +84,14 @@ a.buy:hover{background:var(--acc)}
 .faq a{color:var(--acc)}
 footer{margin-top:34px;text-align:center;color:var(--dim);font-size:12.5px;line-height:1.9}
 footer a{color:var(--dim)}
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:14px}
+.mcard h4{font-size:14px;margin-bottom:8px;word-break:break-all}
+.mcard table{width:100%;border-collapse:collapse}
+.mcard td{padding:3px 0;font-size:13px;color:var(--dim);vertical-align:top}
+.mcard td:first-child{width:190px;color:#8b949e}
+.mcard td b{color:#e6edf3;font-weight:500}
+.mcard .gps{color:var(--warn)}
+.mcard .clean{color:var(--acc);font-size:13px}
 .hide{display:none}
 </style>
 </head>
@@ -97,6 +105,7 @@ footer a{color:var(--dim)}
     <span class="badge"><b>0</b> uploads — works offline</span>
     <span class="badge"><b>No</b> signup</span>
     <span class="badge">Strips <b>EXIF &amp; GPS</b></span>
+    <span class="badge">Free <b>EXIF/GPS viewer</b></span>
     <span class="badge">ZIP download</span>
   </div>
 </header>
@@ -134,6 +143,7 @@ footer a{color:var(--dim)}
 <div class="bar">
   <button id="go" disabled>Compress</button>
   <button id="zip" class="ghost" disabled>Download all as ZIP</button>
+  <button id="meta" class="ghost" disabled>Inspect metadata</button>
   <button id="clr" class="ghost" disabled>Clear</button>
   <span class="stat" id="stat"></span>
 </div>
@@ -143,6 +153,8 @@ footer a{color:var(--dim)}
   <thead><tr><th>File</th><th>Before</th><th>After</th><th>Saved</th><th></th></tr></thead>
   <tbody id="rows"></tbody>
 </table>
+
+<div id="metaout" class="hide"></div>
 
 <div class="pro">
   <h3>ShrinkKit Pro — <span id="price">$9</span>, one payment, yours forever</h3>
@@ -176,6 +188,9 @@ footer a{color:var(--dim)}
 <h3>Does it remove EXIF and GPS location data from photos?</h3>
 <p>Yes, as a side effect of how it works. Re-encoding through Canvas produces a fresh file containing only pixels, so every EXIF, GPS and XMP metadata block is dropped. That means the coordinates of where a phone photo was taken do not travel with it when you share it.</p>
 <p><a href="./exif/">More on what is hidden inside your photos and how to check it →</a></p>
+
+<h3>How do I see what metadata a photo is carrying?</h3>
+<p>Press <b>Inspect metadata</b> after adding your images. ShrinkKit reads the EXIF block out of each file in your browser and shows you exactly what is in it &mdash; camera make and model, lens, body serial number, owner name, the software that touched it, the original date and time, and the GPS latitude and longitude with a map link if the photo is geotagged. It also reports XMP blocks and PNG text chunks. Nothing is uploaded; the parser runs on the bytes sitting on your own machine. This is free and unlimited, because knowing what you are about to share should not cost anything.</p>
 
 <h3>What formats can it output?</h3>
 <p>WebP, JPEG and PNG, or keep whatever the original was. WebP normally gives the smallest file at the same visual quality. ShrinkKit never hands back a file larger than the one you gave it — if compression would make it bigger, you keep the original.</p>
@@ -261,6 +276,7 @@ function render(){
   if(over) $('limit').textContent = `${files.length} images selected — the free version compresses the first ${FREE_LIMIT}. Pro removes the limit.`;
   $('go').disabled = files.length === 0;
   $('clr').disabled = files.length === 0 && results.length === 0;
+  $('meta').disabled = files.length === 0;
   $('stat').textContent = files.length ? `${files.length} image${files.length>1?'s':''} ready` : '';
 }
 
@@ -378,6 +394,123 @@ if(pro){
   }
   $('qv').textContent = $('q').value + '%';
 }
+
+/* ---------- metadata inspector (free, unlimited) ---------- */
+const T_SIZE={1:1,2:1,3:2,4:4,5:8,6:1,7:1,8:2,9:4,10:8,11:4,12:8};
+const TAGS0={0x010F:'Camera make',0x0110:'Camera model',0x0131:'Software',0x0132:'File date/time',
+ 0x0112:'Orientation',0x013B:'Artist',0x8298:'Copyright',0x010E:'Image description'};
+const TAGSE={0x9003:'Date taken',0x9004:'Date digitised',0x829A:'Exposure time',0x829D:'F number',
+ 0x8827:'ISO',0x920A:'Focal length',0xA002:'Pixel width',0xA003:'Pixel height',0xA433:'Lens make',
+ 0xA434:'Lens model',0xA431:'Body serial number',0xA435:'Lens serial number',0xA430:'Camera owner',
+ 0xA420:'Unique image ID'};
+const TAGSG={1:'_latref',2:'_lat',3:'_lonref',4:'_lon',5:'_altref',6:'_alt',7:'_gpstime',29:'_gpsdate',
+ 27:'GPS processing method'};
+
+function readIFD(dv,tiff,off,le,tags,out,sub){
+  if(off+2>dv.byteLength) return;
+  const n=dv.getUint16(off,le);
+  for(let i=0;i<n;i++){
+    const e=off+2+i*12; if(e+12>dv.byteLength) return;
+    const tag=dv.getUint16(e,le), typ=dv.getUint16(e+2,le), cnt=dv.getUint32(e+4,le);
+    const sz=(T_SIZE[typ]||1)*cnt;
+    let vo=e+8; if(sz>4) vo=tiff+dv.getUint32(e+8,le);
+    if(sub&&(tag===0x8769||tag===0x8825)){ sub[tag]=tiff+dv.getUint32(e+8,le); continue; }
+    const name=tags[tag]; if(!name) continue;
+    if(vo+sz>dv.byteLength) continue;
+    let v;
+    if(typ===2){ let str=''; for(let k=0;k<cnt;k++){const c=dv.getUint8(vo+k); if(c===0)break; str+=String.fromCharCode(c);} v=str.trim(); }
+    else if(typ===5||typ===10){ const a=[]; for(let k=0;k<cnt;k++){ const num=typ===5?dv.getUint32(vo+k*8,le):dv.getInt32(vo+k*8,le); const den=typ===5?dv.getUint32(vo+k*8+4,le):dv.getInt32(vo+k*8+4,le); a.push(den?num/den:0);} v=a; }
+    else if(typ===3){ const a=[]; for(let k=0;k<cnt;k++)a.push(dv.getUint16(vo+k*2,le)); v=cnt===1?a[0]:a; }
+    else if(typ===4){ const a=[]; for(let k=0;k<cnt;k++)a.push(dv.getUint32(vo+k*4,le)); v=cnt===1?a[0]:a; }
+    else continue;
+    if(v!==''&&v!==undefined) out[name]=v;
+  }
+}
+function dms(a,ref){ if(!Array.isArray(a)||a.length<3) return null;
+  let d=a[0]+a[1]/60+a[2]/3600; if(ref==='S'||ref==='W') d=-d; return d; }
+
+function parseJPEG(buf){
+  const dv=new DataView(buf); const out={}; let xmp=0;
+  if(dv.getUint16(0)!==0xFFD8) return null;
+  let o=2;
+  while(o+4<dv.byteLength){
+    if(dv.getUint8(o)!==0xFF) break;
+    const m=dv.getUint8(o+1); if(m===0xDA||m===0xD9) break;
+    const len=dv.getUint16(o+2); if(len<2) break;
+    if(m===0xE1){
+      let sig=''; for(let k=0;k<6&&o+4+k<dv.byteLength;k++) sig+=String.fromCharCode(dv.getUint8(o+4+k));
+      if(sig.slice(0,4)==='Exif'){
+        const tiff=o+10;
+        const le=dv.getUint16(tiff)===0x4949;
+        const ifd0=tiff+dv.getUint32(tiff+4,le);
+        const sub={};
+        readIFD(dv,tiff,ifd0,le,TAGS0,out,sub);
+        if(sub[0x8769]) readIFD(dv,tiff,sub[0x8769],le,TAGSE,out,null);
+        if(sub[0x8825]){ const g={}; readIFD(dv,tiff,sub[0x8825],le,TAGSG,g,null);
+          const lat=dms(g._lat,g._latref), lon=dms(g._lon,g._lonref);
+          if(lat!==null&&lon!==null){ out._gpslat=lat; out._gpslon=lon; }
+          if(g._alt!==undefined) out['GPS altitude']=(Array.isArray(g._alt)?g._alt[0]:g._alt).toFixed(1)+' m';
+          if(g._gpsdate) out['GPS date (UTC)']=g._gpsdate;
+          if(Array.isArray(g._gpstime)) out['GPS time (UTC)']=g._gpstime.map(x=>String(Math.round(x)).padStart(2,'0')).join(':');
+          if(g['GPS processing method']) out['GPS method']=g['GPS processing method'];
+        }
+      } else if(sig.slice(0,4)==='http') xmp+=len;
+    }
+    o+=2+len;
+  }
+  if(xmp) out['XMP block']=xmp+' bytes present';
+  return out;
+}
+function parsePNG(buf){
+  const dv=new DataView(buf), u8=new Uint8Array(buf), out={};
+  if(dv.getUint32(0)!==0x89504E47) return null;
+  let o=8;
+  while(o+8<=dv.byteLength){
+    const len=dv.getUint32(o); let t=''; for(let k=0;k<4;k++)t+=String.fromCharCode(u8[o+4+k]);
+    if(t==='IEND') break;
+    if(t==='tEXt'||t==='iTXt'||t==='zTXt'){
+      let key='',k=0; while(k<len&&u8[o+8+k]!==0){key+=String.fromCharCode(u8[o+8+k]);k++;}
+      let val=''; for(let j=k+1;j<Math.min(len,k+160);j++){const c=u8[o+8+j]; if(c>=32)val+=String.fromCharCode(c);}
+      if(key) out['PNG text: '+key]=val.trim()||'(binary)';
+    }
+    if(t==='eXIf') out['PNG eXIf chunk']=len+' bytes present';
+    o+=12+len;
+  }
+  return out;
+}
+function fmtv(k,v){
+  if(k==='F number') return 'f/'+(+v[0]).toFixed(1);
+  if(k==='Exposure time'){ const x=+v[0]; return x>=1?x+' s':'1/'+Math.round(1/x)+' s'; }
+  if(k==='Focal length') return (+v[0]).toFixed(0)+' mm';
+  if(Array.isArray(v)) return v.map(x=>typeof x==='number'?(+x.toFixed(4)):x).join(', ');
+  return String(v);
+}
+const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+$('meta').onclick = async () => {
+  const box=$('metaout'); box.innerHTML=''; box.classList.remove('hide');
+  for(const f of files){
+    const buf=await f.arrayBuffer();
+    let d=null;
+    try{ d = f.type==='image/png' ? parsePNG(buf) : parseJPEG(buf); }catch(e){ d=null; }
+    const card=document.createElement('div'); card.className='mcard';
+    let html='<h4>'+esc(f.name)+'</h4>';
+    if(d===null) html+='<p class="clean">No EXIF or PNG text container in this file &mdash; nothing to read.</p>';
+    else{
+      const rows=[];
+      if(d._gpslat!==undefined){
+        const ll=d._gpslat.toFixed(6)+', '+d._gpslon.toFixed(6);
+        rows.push(['<span class="gps">GPS location</span>','<b class="gps">'+ll+'</b> &mdash; <a style="color:var(--acc)" target="_blank" rel="noopener noreferrer" href="https://www.openstreetmap.org/?mlat='+d._gpslat+'&amp;mlon='+d._gpslon+'#map=16/'+d._gpslat+'/'+d._gpslon+'">open map</a>']);
+      }
+      for(const k in d){ if(k[0]==='_') continue; rows.push([esc(k),'<b>'+esc(fmtv(k,d[k]))+'</b>']); }
+      html += rows.length
+        ? '<table>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</table>'
+        : '<p class="clean">Clean &mdash; no EXIF, GPS or text metadata found in this file.</p>';
+      if(d._gpslat!==undefined) html+='<p class="clean" style="margin-top:8px">Compressing this image removes the coordinates above.</p>';
+    }
+    card.innerHTML=html; box.appendChild(card);
+  }
+};
+
 </script>
 </body>
 </html>
