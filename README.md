@@ -16,6 +16,7 @@ Squoosh does one image at a time. TinyPNG uploads your files to somebody else's 
 - Drop a whole folder of images → get them back compressed, as individual files or one ZIP
 - WebP / JPEG / PNG output, or keep the original format
 - Quality slider, optional max width/height resize
+- **Inspect metadata before you share** — one click reads the EXIF block out of every file in your browser and shows camera make/model, lens, body serial number, owner name, editing software, original timestamp and **GPS latitude/longitude with a map link**. Also reports XMP blocks and PNG text chunks. Free and unlimited.
 - **Strips EXIF and GPS metadata** — canvas re-encoding drops every metadata block, so location data in your photos never leaves with them
 - Never returns a file bigger than the one you gave it
 - One HTML file. No build step, no framework, no tracking, no analytics.
@@ -35,4 +36,4 @@ It's one static file. Clone and open `index.html`, or drop it on any static host
 
 ## Licence
 
-Source-available for inspection and self-audit — read every line before you trust it with your photos, which is rather the point. Pro licences fund the upkeep.
+MIT — see [LICENSE](LICENSE). Read every line before you trust it with your photos, which is rather the point. Pro licences fund the upkeep rather than gate the source.
