@@ -176,7 +176,10 @@ footer a{color:var(--dim)}
 </div>
 
 <section class="faq">
-<h2>Questions people ask before they trust an image compressor</h2>
+<h2>Also free, from the same shelf</h2>
+    <p><a href="https://p32929.github.io/blackline/">Blackline</a> — black out text in a PDF so it is actually removed, not just covered up. Same idea as ShrinkKit: your file is never uploaded. See its <a href="https://p32929.github.io/blackline/guides/">redaction and metadata guides</a>.</p>
+
+    <h2>Questions people ask before they trust an image compressor</h2>
 
 <h3>Does ShrinkKit upload my images to a server?</h3>
 <p>No. There is no server. The page is a single static HTML file; every image is decoded, resized and re-encoded by your own browser using the Canvas API, and the result is handed straight back to you as a download. You can prove it: open the Network tab in DevTools, compress a folder, and watch that nothing leaves the page. You can also disconnect from the internet after the page loads and it keeps working.</p>
@@ -202,11 +205,6 @@ footer a{color:var(--dim)}
 
 <h3>Can I self-host it?</h3>
 <p>Yes. It is one HTML file — clone <a href="https://github.com/p32929/shrinkkit">the repository</a> and open <code>index.html</code>, or drop it on any static host. The source is published so you can read every line before trusting it with your photos, which is rather the point.</p>
-</section>
-
-<section>
-  <h2>Need to redact a document, not compress it?</h2>
-  <p><a href="https://p32929.github.io/blackline/" target="_blank" rel="noopener">Blackline</a> is the companion tool: it blacks out text in a PDF and flattens the page so the covered words are genuinely removed from the file, not just hidden under a rectangle. Same idea as this one — it runs entirely in your browser and never uploads your document.</p>
 </section>
 
 <footer>
