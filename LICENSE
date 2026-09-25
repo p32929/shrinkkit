@@ -1,21 +1,32 @@
-MIT License
+ShrinkKit — Licence
+Copyright (c) 2026 Fayaz Bin Salam (p32929). All rights reserved.
 
-Copyright (c) 2026 Fayaz Bin Salam
+This is source-available software, not open source.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+WHAT YOU MAY DO FOR FREE
+  1. Read this source code.
+  2. Use the hosted tool at https://p32929.github.io/shrinkkit/ for batches of up
+     to 20 images, for any purpose, including commercial work.
+  3. Clone this repository and run it locally, on your own machine, for your own
+     personal use and evaluation.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+WHAT NEEDS A PAID LICENCE (https://p32929.gumroad.com/l/shrinkkit)
+  Pro ($9)              — removes the 20-image batch limit for one named
+                           individual, on any number of that individual's own
+                           devices, for life.
+  White-Label Source
+  License ($1,499)      — full source, the right to rebrand it under your own
+                           name, and the right to redistribute or resell it,
+                           modified or not, as your own product.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+WHAT IS NOT PERMITTED WITHOUT WRITTEN PERMISSION
+  Redistributing this software (modified or not), publishing it under another
+  name, selling it, or offering it as a hosted service to third parties, unless
+  you hold the White-Label Source License above.
+
+NO WARRANTY
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF
+  OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
