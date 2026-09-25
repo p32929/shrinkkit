@@ -31,6 +31,8 @@ The free version compresses **20 images per batch** — enough to try it properl
 - Batch rename patterns: `{name}` `{n}` `{w}x{h}`
 - Settings remembered between visits
 
+Building something in this space and want to skip writing your own compressor? **[White-Label Source License — $1,499](https://p32929.gumroad.com/l/shrinkkit)**: full source, rebrand it under your own name, resell it as your own product.
+
 ## Self-host it
 
 It's one static file. Clone and open `index.html`, or drop it on any static host.
@@ -41,4 +43,4 @@ It's one static file. Clone and open `index.html`, or drop it on any static host
 
 ## Licence
 
-MIT — see [LICENSE](LICENSE). Read every line before you trust it with your photos, which is rather the point. Pro licences fund the upkeep rather than gate the source.
+Source-available — see [LICENSE](LICENSE). Read every line before you trust it with your photos, which is rather the point. Free to use and self-host; a paid licence is required to redistribute, resell or rebrand it.
